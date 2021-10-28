@@ -2,7 +2,7 @@
 
 namespace PrioritySync;
 
-class Plugin
+class PrsPlugin
 {
     public function __construct()
     {

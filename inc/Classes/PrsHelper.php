@@ -2,7 +2,7 @@
 
 namespace PrioritySync;
 
-class Helper
+class PrsHelper
 {
     public static function num_format($num, $after_dot = 0)
     {

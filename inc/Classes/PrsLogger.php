@@ -2,7 +2,7 @@
 
 namespace PrioritySync;
 
-class Logger
+class PrsLogger
 {
     public static $log_dir = PRS_PLAGIN_ROOT . 'logs/';
     public function __construct()

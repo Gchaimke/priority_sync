@@ -2,7 +2,7 @@
 
 namespace PrioritySync;
 
-class Cron
+class PrsCron
 {
     public function __construct()
     {

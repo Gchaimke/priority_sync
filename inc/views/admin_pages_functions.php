@@ -1,9 +1,8 @@
 <?php
 
-use PrioritySync\Cron;
+use PrioritySync\PrsCron;
 use PrioritySync\PrsProducts;
-use PrioritySync\Helper;
-use PrioritySync\Logger;
+use PrioritySync\PrsLogger;
 
 function prs_dashboard()
 {
@@ -47,12 +46,12 @@ function prs_settings()
     include 'settings.php'; //view settings page
 
     if (isset($_GET['cron']) && $_GET['cron'] == 'run') {
-        Logger::log_message('Cron by Click');
-        Cron::prs_cron_exec();
+        PrsLogger::log_message('Cron by Click');
+        PrsCron::prs_cron_exec();
     }
 
     if (isset($_GET['remove_cron']) && $_GET['remove_cron'] != '') {
-        Cron::remove_cron($_GET['remove_cron']);
+        PrsCron::remove_cron($_GET['remove_cron']);
         echo '<h4>' . $_GET['remove_cron'] . ' job removed</h4>';
     }
     // Cron::get_all_jobs();
@@ -60,7 +59,7 @@ function prs_settings()
 
 function prs_logs()
 {
-    $logs = Logger::getFileList();
+    $logs = PrsLogger::getFileList();
     $i = 0;
     $view_log_list = '<select name="logs" id="select_logs" onchange="view_selected_log()">';
     foreach ($logs as $log) {
@@ -73,13 +72,13 @@ function prs_logs()
     }
     $view_log_list .= '</select>';
     if (isset($_GET['log'])) {
-        $view_log = Logger::getlogContent(date('d-m-Y', strtotime( $_GET['log'])));
+        $view_log = PrsLogger::getlogContent(date('d-m-Y', strtotime( $_GET['log'])));
     } else {
-        $view_log = Logger::getlogContent(date('d-m-Y'));
+        $view_log = PrsLogger::getlogContent(date('d-m-Y'));
     }
 
     if (isset($_GET['clear_logs'])) {
-        $view_log = Logger::clearLogs();
+        $view_log = PrsLogger::clearLogs();
     }
 
     include 'logs.php';
