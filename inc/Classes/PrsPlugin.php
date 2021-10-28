@@ -10,15 +10,16 @@ class PrsPlugin
         add_action('admin_enqueue_scripts', [$this, 'prs_admin_scripts']);
         add_action('wp_enqueue_scripts', [$this, 'prs_user_scripts']);
         add_action('wp_dashboard_setup', [$this, 'prs_add_dashboard_widget']);
+        add_filter('plugin_action_links_priority_sync/priority_sync.php', [$this, 'prs_settings_link']);
     }
 
     public function prs_add_admin_pages()
     {
         require_once PRS_PLAGIN_ROOT . 'inc/views/admin_pages_functions.php';
         add_menu_page('Priority', 'Priority sync', 'edit_pages', 'prs_dashboard', 'prs_dashboard', 'dashicons-businessman', 4);
-        add_submenu_page('prs_dashboard', "Products", "Products", 'edit_pages', 'prsProducts', 'prs_products');
-        add_submenu_page('prs_dashboard', "Settings", "Settings", 'edit_pages', 'prsSettings', 'prs_settings');
-        add_submenu_page('prs_dashboard', "Logs", "Logs", 'edit_pages', 'prsLogs', 'prs_logs');
+        add_submenu_page('prs_dashboard', "Products", "Products", 'edit_pages', 'prs_products', 'prs_products');
+        add_submenu_page('prs_dashboard', "Settings", "Settings", 'edit_pages', 'prs_settings', 'prs_settings');
+        add_submenu_page('prs_dashboard', "Logs", "Logs", 'edit_pages', 'prs_logs', 'prs_logs');
     }
 
     public function prs_admin_scripts()
@@ -42,5 +43,13 @@ class PrsPlugin
     public function prs_add_dashboard_widget()
     {
         new PrsDashboard();
+    }
+
+    public function prs_settings_link($links)
+    {
+        $url = esc_url(add_query_arg('page', 'prs_settings', get_admin_url() . 'admin.php'));
+        $settings_link = "<a href='$url'>" . __('Settings') . '</a>';
+        array_push($links, $settings_link);
+        return $links;
     }
 }
