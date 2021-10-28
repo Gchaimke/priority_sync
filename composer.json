@@ -1,0 +1,15 @@
+{
+    "name": "gchaim/priority_sync",
+    "authors": [
+        {
+            "name": "Chaim Gorbov",
+            "email": "gchaimke@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "PrioritySync\\": "inc/Classes"
+        }
+    }
+}
