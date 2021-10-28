@@ -1,2 +1,3 @@
-# WP-ERP-SYNC
-Sync between Wordpress and Priority system plugin
+# Priority Wordpress plugin
+Sync between Wordpress and Priority products quantity and prices.
+Use Priority REST API.
