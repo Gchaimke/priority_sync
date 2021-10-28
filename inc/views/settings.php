@@ -19,11 +19,23 @@ function CallAPI($url, $username, $pass)
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $result = curl_exec($curl);
+    if (!curl_errno($curl)) {
+        switch ($http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
+            case 200:  # OK
+                break;
+            case 401:
+                echo "<h2> Error ".curl_getinfo($curl)['http_code'].": <ol><li>Wrong user name or password</li><li>Or Priority page not exists.</li></ol></h2>";
+                break;
+            default:
+                echo 'Unexpected HTTP code: ', $http_code, "\n";
+        }
+    }
     curl_close($curl);
     return $result;
 }
 
 if (isset($_POST['priority_url'])) {
+    $pass = $_POST['api_pass'];
     $json_data = CallAPI($url . $url_params, $username, $pass);
 }
 ?>
@@ -38,7 +50,7 @@ if (isset($_POST['priority_url'])) {
                     <label for="priority_url">Priority URL</label>
                 </th>
                 <td>
-                    <input type="text" name="priority_url">
+                    <input type="text" name="priority_url" value="<?= $url ?>" style="width: 80VW">
                 </td>
             </tr>
             <tr>
@@ -46,7 +58,7 @@ if (isset($_POST['priority_url'])) {
                     <label for="url_parameters">URL Parameters</label>
                 </th>
                 <td>
-                    <input type="text" name="url_parameters" value="">
+                    <input type="text" name="url_parameters" value="<?= $url_params ?>" style="width: 80VW">
                 </td>
             </tr>
             <tr>
@@ -54,7 +66,7 @@ if (isset($_POST['priority_url'])) {
                     <label for="api_username">Api Username</label>
                 </th>
                 <td>
-                    <input type="text" name="api_username">
+                    <input type="text" name="api_username" value="<?=$username?>">
                 </td>
             </tr>
             <tr>
@@ -62,7 +74,7 @@ if (isset($_POST['priority_url'])) {
                     <label for="api_pass">Api Passoword</label>
                 </th>
                 <td>
-                    <input type="password" name="api_pass">
+                    <input type="password" name="api_pass"  value="<?=$pass?>">
                 </td>
             </tr>
             <tr>
