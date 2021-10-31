@@ -34,10 +34,7 @@ function CallAPI($url, $username, $pass)
     return $result;
 }
 
-if (isset($_POST['priority_url'])) {
-    $pass = $_POST['api_pass'];
-    $json_data = CallAPI($url . $url_params, $username, $pass);
-}
+
 ?>
 <h3>DEMO</h3>
 <div>Url: <?= $url ?></div>
@@ -80,16 +77,20 @@ if (isset($_POST['priority_url'])) {
                     <input type="password" name="prs_api_pass" value="<?php echo get_option('prs_api_pass'); ?>">
                 </td>
             </tr>
-            <tr>
-                <th><label for="submit">Save settings</label></th>
-                <td>
-                    <?php submit_button(); ?>
-                </td>
-            </tr>
         </tbody>
     </table>
+    <?php submit_button(); ?>
 </form>
-
+<a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get">Tests</a>
+<?php
+if (isset($_GET['get'])) {
+    $url = get_option('prs_priority_url');
+    $url_params = get_option('prs_url_parameters');
+    $username = get_option('prs_api_username');
+    $pass = get_option('prs_api_pass');
+    $json_data = CallAPI($url . $url_params, $username, $pass);
+}
+?>
 <pre>
     <?= print_r(json_decode($json_data)) ?>
 </pre>
