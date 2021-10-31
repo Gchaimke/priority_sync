@@ -57,6 +57,9 @@ class PrsPlugin
     public function update_prs_settings()
     {
         register_setting('prs-plugin-settings', 'prs_priority_url');
+        register_setting('prs-plugin-settings', 'prs_priority_select');
+        register_setting('prs-plugin-settings', 'prs_priority_filter');
+        register_setting('prs-plugin-settings', 'prs_priority_expand');
         register_setting('prs-plugin-settings', 'prs_url_parameters');
         register_setting('prs-plugin-settings', 'prs_api_username');
         register_setting('prs-plugin-settings', 'prs_api_pass');

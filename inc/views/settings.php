@@ -50,15 +50,39 @@ function CallAPI($url, $username, $pass)
                     <label for="prs_priority_url">Priority URL</label>
                 </th>
                 <td>
-                    <input type="text" name="prs_priority_url" value="<?php echo get_option('prs_priority_url'); ?>" style="width: 80VW">
+                    <input type="text" name="prs_priority_url" value="<?php echo get_option('prs_priority_url'); ?>" style="width: 550px">
                 </td>
             </tr>
             <tr>
                 <th scope="row">
-                    <label for="prs_url_parameters">URL Parameters</label>
+                    <label for="prs_priority_select">Select Columns</label>
                 </th>
                 <td>
-                    <input type="text" name="prs_url_parameters" value="<?php echo get_option('prs_url_parameters'); ?>" style="width: 80VW">
+                    <input type="text" name="prs_priority_select" value="<?php echo get_option('prs_priority_select'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_filter">Filter rows</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_filter" value="<?php echo get_option('prs_priority_filter'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_expand">Expend sub rows</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_expand" value="<?php echo get_option('prs_priority_expand'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_url_parameters">URL Optional Parameters</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_url_parameters" value="<?php echo get_option('prs_url_parameters'); ?>" style="width: 500px">
                 </td>
             </tr>
             <tr>
@@ -84,24 +108,32 @@ function CallAPI($url, $username, $pass)
 <a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_data">Get Data from Server</a>
 <a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_file">Get Data from File</a>
 <a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_data&save_file">Get Data & Save to File</a>
-<?php
-if (isset($_GET['get_data'])) {
-    $url = get_option('prs_priority_url');
-    $url_params = get_option('prs_url_parameters');
-    $username = get_option('prs_api_username');
-    $pass = get_option('prs_api_pass');
-    $json_data = CallAPI($url . $url_params, $username, $pass);
-    if(isset($_GET['save_file'])){
-        file_put_contents(PRS_DATA_FOLDER . 'sync/products.json', $json_data);
-    }
-}
-if (isset($_GET['get_file'])) {
-    if (file_exists(PRS_DATA_FOLDER . 'sync/products.json')) {
-        $json_data = file_get_contents(PRS_DATA_FOLDER . 'sync/products.json');
-    }
-}
-
-?>
 <pre>
-    <?= print_r(json_decode($json_data)) ?>
+    <?php
+    if (isset($_GET['get_data'])) {
+        ini_set('max_execution_time', 0);
+        $url = get_option('prs_priority_url');
+        $url_params = str_replace(
+            ' ',
+            '%20',
+            '$select=' . get_option('prs_priority_select') .
+                '&$filter=' . get_option('prs_priority_filter') .
+                '&$expand=' . get_option('prs_priority_expand') . "&" .
+                get_option('prs_url_parameters')
+        );
+        $username = get_option('prs_api_username');
+        $pass = get_option('prs_api_pass');
+        $json_data = CallAPI($url . "?" . $url_params, $username, $pass);
+        if (isset($_GET['save_file'])) {
+            file_put_contents(PRS_DATA_FOLDER . 'sync/products.json', $json_data);
+        }
+        print_r(json_decode($json_data));
+    }
+    if (isset($_GET['get_file'])) {
+        if (file_exists(PRS_DATA_FOLDER . 'sync/products.json')) {
+            $json_data = file_get_contents(PRS_DATA_FOLDER . 'sync/products.json');
+            print_r(json_decode($json_data));
+        }
+    }
+    ?>
 </pre>
