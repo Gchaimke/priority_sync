@@ -14,7 +14,7 @@
             }
 
         }).fail(function (e) {
-            console.log("AJAX failed! %o",e);
+            console.log("AJAX failed! %o", e);
         }).always(function () {
             console.log('AJAX called.');
             $(".spinner").removeClass("is-active");
@@ -38,7 +38,13 @@
         my_ajax('prs_add_product', product_values);
     });
 
-
+    $(document).on("click", "#search_table .button", function () {
+        var row = $(this).closest('tr');
+        var columns = row.find('td');
+        var product_values = build_row_array(columns);
+        console.log(product_values);
+        my_ajax('prs_add_product', product_values);
+    });
 
     $('.prs_add_all_product_button').on('click', function () {
         my_ajax('prs_add_all_products');
@@ -50,7 +56,7 @@
 
     $('.prs_search_for_product').on('click', function () {
         $('#admin_message').empty();
-        $('.add_products_from_search').fadeIn(1000);
+        $('.prs_add_products_from_search').fadeIn(1000);
         my_ajax('prs_search_for_product', $('#search_product').val(), true);
     });
 

@@ -145,7 +145,8 @@ class PrsProducts
         return "<tr>
                 <th>SKU</th>
                 <th>name</th>
-                <th>price / wholesale price</th>
+                <th>price </th>
+                <th>wholesale price</th>
                 <th>stock</th>
                 <th>add</th></tr>";
     }
@@ -155,7 +156,8 @@ class PrsProducts
         $product_line = "<tr class='product'>
         <td data-column='SKU'>{$product['SKU']}</td>
         <td data-column='name'>{$product['name']}</td>
-        <td data-column='price'>" . PrsHelper::num_format($product['price'], 2) . " / " . PrsHelper::num_format($product['wholesale_price'], 2) . "</td>
+        <td data-column='price'>" . PrsHelper::num_format($product['price'], 2) . "</td>
+        <td data-column='wholesale_price'>" . PrsHelper::num_format($product['wholesale_price'], 2) . "</td>
         <td data-column='stock'>" . PrsHelper::num_format($product['stock']) . "</td>
         <td><button class='button action'>Add</button></td></tr>";
         return $product_line;
@@ -173,7 +175,7 @@ class PrsProducts
 
     function add_product($product_data = '')
     {
-        check_ajax_referer('prs', 'security');
+        // check_ajax_referer('prs', 'security');
         if ($product_data == '') {
             $product_data = $_POST['data'];
         }
