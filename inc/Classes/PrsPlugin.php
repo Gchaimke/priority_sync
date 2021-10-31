@@ -11,6 +11,7 @@ class PrsPlugin
         add_action('wp_enqueue_scripts', [$this, 'prs_user_scripts']);
         add_action('wp_dashboard_setup', [$this, 'prs_add_dashboard_widget']);
         add_filter('plugin_action_links_priority_sync/priority_sync.php', [$this, 'prs_settings_link']);
+        add_action('admin_init', [$this, 'update_prs_settings']);
     }
 
     public function prs_add_admin_pages()
@@ -51,5 +52,13 @@ class PrsPlugin
         $settings_link = "<a href='$url'>" . __('Settings') . '</a>';
         array_push($links, $settings_link);
         return $links;
+    }
+
+    public function update_prs_settings()
+    {
+        register_setting('prs-plugin-settings', 'prs_priority_url');
+        register_setting('prs-plugin-settings', 'prs_url_parameters');
+        register_setting('prs-plugin-settings', 'prs_api_username');
+        register_setting('prs-plugin-settings', 'prs_api_pass');
     }
 }

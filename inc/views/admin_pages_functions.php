@@ -72,7 +72,7 @@ function prs_logs()
     }
     $view_log_list .= '</select>';
     if (isset($_GET['log'])) {
-        $view_log = PrsLogger::getlogContent(date('d-m-Y', strtotime( $_GET['log'])));
+        $view_log = PrsLogger::getlogContent(date('d-m-Y', strtotime($_GET['log'])));
     } else {
         $view_log = PrsLogger::getlogContent(date('d-m-Y'));
     }

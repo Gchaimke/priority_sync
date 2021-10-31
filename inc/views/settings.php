@@ -24,7 +24,7 @@ function CallAPI($url, $username, $pass)
             case 200:  # OK
                 break;
             case 401:
-                echo "<h2> Error ".curl_getinfo($curl)['http_code'].": <ol><li>Wrong user name or password</li><li>Or Priority page not exists.</li></ol></h2>";
+                echo "<h2> Error " . curl_getinfo($curl)['http_code'] . ": <ol><li>Wrong user name or password</li><li>Or Priority page not exists.</li></ol></h2>";
                 break;
             default:
                 echo 'Unexpected HTTP code: ', $http_code, "\n";
@@ -42,45 +42,48 @@ if (isset($_POST['priority_url'])) {
 <h3>DEMO</h3>
 <div>Url: <?= $url ?></div>
 <div>Parameters: <?= $url_params ?></div>
-<form method="POST" action="<?php echo admin_url('admin.php?page=prs_settings'); ?>">
+<!-- <form method="POST" action="<?php echo admin_url('admin.php?page=prs_settings'); ?>"> -->
+<form method="POST" action="options.php">
+    <?php settings_fields('prs-plugin-settings'); ?>
+    <?php do_settings_sections('prs-plugin-settings'); ?>
     <table class="form-table">
         <tbody>
             <tr>
                 <th scope="row">
-                    <label for="priority_url">Priority URL</label>
+                    <label for="prs_priority_url">Priority URL</label>
                 </th>
                 <td>
-                    <input type="text" name="priority_url" value="<?= $url ?>" style="width: 80VW">
+                    <input type="text" name="prs_priority_url" value="<?php echo get_option('prs_priority_url'); ?>" style="width: 80VW">
                 </td>
             </tr>
             <tr>
                 <th scope="row">
-                    <label for="url_parameters">URL Parameters</label>
+                    <label for="prs_url_parameters">URL Parameters</label>
                 </th>
                 <td>
-                    <input type="text" name="url_parameters" value="<?= $url_params ?>" style="width: 80VW">
+                    <input type="text" name="prs_url_parameters" value="<?php echo get_option('prs_url_parameters'); ?>" style="width: 80VW">
                 </td>
             </tr>
             <tr>
                 <th scope="row">
-                    <label for="api_username">Api Username</label>
+                    <label for="prs_api_username">Api Username</label>
                 </th>
                 <td>
-                    <input type="text" name="api_username" value="<?=$username?>">
+                    <input type="text" name="prs_api_username" value="<?php echo get_option('prs_api_username'); ?>">
                 </td>
             </tr>
             <tr>
                 <th scope="row">
-                    <label for="api_pass">Api Passoword</label>
+                    <label for="prs_api_pass">Api Passoword</label>
                 </th>
                 <td>
-                    <input type="password" name="api_pass"  value="<?=$pass?>">
+                    <input type="password" name="prs_api_pass" value="<?php echo get_option('prs_api_pass'); ?>">
                 </td>
             </tr>
             <tr>
-                <th><label for="api_pass">Save settings</label></th>
+                <th><label for="submit">Save settings</label></th>
                 <td>
-                    <input class="button action" type="submit" value="Save" class="Send" />
+                    <?php submit_button(); ?>
                 </td>
             </tr>
         </tbody>
