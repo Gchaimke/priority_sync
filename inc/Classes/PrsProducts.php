@@ -138,6 +138,7 @@ class PrsProducts
             echo "search must be more than 3 signs!";
         }
         echo $table_data;
+        die();
     }
 
     function view_products_table_head()
@@ -208,6 +209,7 @@ class PrsProducts
             echo 'Product with SKU:' . $product_data['SKU'] . ' Exists!';
         }
         return true;
+        die();
     }
 
     function add_all_products()
@@ -228,6 +230,7 @@ class PrsProducts
                 break;
         }
         echo (" - " . $count . ' new products added!');
+        die();
     }
 
     function update_all_products()
@@ -257,7 +260,8 @@ class PrsProducts
         }
         $msg = "Total: $count, Updated: $success ";
         echo $msg;
-        Logger::log_message($msg);
+        PrsLogger::log_message($msg);
+        die();
     }
 
     function get_existings_products_skus()

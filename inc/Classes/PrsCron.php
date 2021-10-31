@@ -22,7 +22,7 @@ class PrsCron
 
     public static function prs_cron_exec()
     {
-        Logger::log_message('=== Cron job Sart ===');
+        PrsLogger::log_message('=== Cron job Sart ===');
         //Cron Sync data files with Gdrive
         $sync_status = Cron::prs_sync_files();
         if ($sync_status > 0) {
@@ -30,9 +30,9 @@ class PrsCron
             $prs_product_class = new PrsProducts();
             $prs_product_class->update_all_products();
         } else {
-            Logger::log_message('No Updates');
+            PrsLogger::log_message('No Updates');
         }
-        Logger::log_message('*** Cron job End ***');
+        PrsLogger::log_message('*** Cron job End ***');
     }
 
     private static function prs_sync_files()
@@ -45,7 +45,7 @@ class PrsCron
         if ($sync_status > 0) {
             return $sync_status;
         } else if ($sync_status == -1) {
-            Logger::log_message('Try to get token from refresh.');
+            PrsLogger::log_message('Try to get token from refresh.');
             $client->setAccessToken($google_helper->get_token_from_refresh());
             return $google_helper->get_sync_files($google_helper->get_service());
         }

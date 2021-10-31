@@ -12,15 +12,15 @@ class PrsOrder
     function wes_sync_order($order_id){
         $file_status = $this->wes_create_order($order_id);
         if($file_status){
-            Logger::log_message('New order created! SITEDOC_' . $order_id . '.xml');
+            PrsLogger::log_message('New order created! SITEDOC_' . $order_id . '.xml');
             $status = $this->wes_upload_order($order_id);
             if($status){
-                Logger::log_message("Order: $order_id uploaded success!");
+                PrsLogger::log_message("Order: $order_id uploaded success!");
             }else{
-                Logger::log_message("Order: $order_id not uploaded!");
+                PrsLogger::log_message("Order: $order_id not uploaded!");
             }
         }else{
-            Logger::log_message("Error! SITEDOC_$order_id.xml not created!");
+            PrsLogger::log_message("Error! SITEDOC_$order_id.xml not created!");
         }
         
     }
@@ -141,12 +141,12 @@ class PrsOrder
         $count = 5;
         do {
             if ($sync_status > 0){
-                Logger::log_message('Uploading order:' . $order_id);
+                PrsLogger::log_message('Uploading order:' . $order_id);
                 $google_helper->upload_file($order_id, $google_helper->get_service());
                 return true;
             }
             if ($sync_status == -1) {
-                Logger::log_message('Try to get token from refresh.');
+                PrsLogger::log_message('Try to get token from refresh.');
                 $google_helper->get_token_from_refresh();
             }
             $count--;
