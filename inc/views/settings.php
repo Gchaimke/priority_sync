@@ -81,15 +81,26 @@ function CallAPI($url, $username, $pass)
     </table>
     <?php submit_button(); ?>
 </form>
-<a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get">Tests</a>
+<a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_data">Get Data from Server</a>
+<a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_file">Get Data from File</a>
+<a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_data&save_file">Get Data & Save to File</a>
 <?php
-if (isset($_GET['get'])) {
+if (isset($_GET['get_data'])) {
     $url = get_option('prs_priority_url');
     $url_params = get_option('prs_url_parameters');
     $username = get_option('prs_api_username');
     $pass = get_option('prs_api_pass');
     $json_data = CallAPI($url . $url_params, $username, $pass);
+    if(isset($_GET['save_file'])){
+        file_put_contents(PRS_DATA_FOLDER . 'sync/products.json', $json_data);
+    }
 }
+if (isset($_GET['get_file'])) {
+    if (file_exists(PRS_DATA_FOLDER . 'sync/products.json')) {
+        $json_data = file_get_contents(PRS_DATA_FOLDER . 'sync/products.json');
+    }
+}
+
 ?>
 <pre>
     <?= print_r(json_decode($json_data)) ?>

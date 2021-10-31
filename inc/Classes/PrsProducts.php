@@ -26,6 +26,19 @@ class PrsProducts
         add_action('wp_ajax_update_all_products', [$this, 'update_all_products']);
     }
 
+    public function get_products_data()
+    {
+        $file = PRS_DATA_FOLDER . 'sync/products.json';
+        if (file_exists($file)) {
+            $xml = (new Reader(new Document()))->load($file);
+            $data = $xml->parse([
+                'products' => ['uses' => 'Product[ProductCode>SKU,ProductName>name,Pricelist1>price,Pricelist2>wholesale_price,StockBalance>stock]'],
+            ]);
+            return $data;
+        }
+        return false;
+    }
+
     public function get_products_limit()
     {
         return $this->max_products;
