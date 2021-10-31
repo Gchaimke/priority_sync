@@ -6,35 +6,57 @@ class PrsProducts
 {
     private $max_products;
     private $active_products;
-    public $products;
+    public $prs_products;
     public function __construct()
     {
-        // $data = new ParseXml();
-        // $products = $data->get_products_data();
-        $products = array();
-        if($products){
-            $this->products = $products['products'];
-        }else{
-            $this->products = array();
+        $products = $this->get_products_data();
+        if ($products) {
+            $this->prs_products = $products;
+        } else {
+            $this->prs_products = array();
         }
         $this->set_products_limit(100);
 
         //before use ajax add calss init to main plugin file!
-        add_action('wp_ajax_add_product', [$this, 'add_product']);
-        add_action('wp_ajax_search_for_product', [$this, 'search_for_product']);
-        add_action('wp_ajax_add_all_products', [$this, 'add_all_products']);
-        add_action('wp_ajax_update_all_products', [$this, 'update_all_products']);
+        add_action('wp_ajax_prs_add_product', [$this, 'add_product']);
+        add_action('wp_ajax_prs_search_for_product', [$this, 'search_for_product']);
+        add_action('wp_ajax_prs_add_all_products', [$this, 'add_all_products']);
+        add_action('wp_ajax_prs_update_all_products', [$this, 'update_all_products']);
     }
 
     public function get_products_data()
     {
         $file = PRS_DATA_FOLDER . 'sync/products.json';
+        $products = array();
         if (file_exists($file)) {
-            $xml = (new Reader(new Document()))->load($file);
-            $data = $xml->parse([
-                'products' => ['uses' => 'Product[ProductCode>SKU,ProductName>name,Pricelist1>price,Pricelist2>wholesale_price,StockBalance>stock]'],
-            ]);
-            return $data;
+            $data = json_decode(file_get_contents($file));
+            foreach ($data->value as $index => $part) {
+                $product = array();
+                foreach ($part as $key => $value) {
+                    switch ($key) {
+                        case 'PARTNAME':
+                            $product['SKU'] = $value;
+                            break;
+                        case 'PARTDES':
+                            $product['name'] = $value;
+                            break;
+                        case 'BASEPLPRICE':
+                            $product['price'] = $value;
+                            break;
+                        case 'WSPLPRICE':
+                            $product['wholesale_price'] = $value;
+                            break;
+                        case 'PARTBALANCE_SUBFORM':
+                            $product['stock'] = isset($value[0]->BALANCE) ? $value[0]->BALANCE : 1;
+                            break;
+                        default:
+                            # code...
+                            break;
+                    }
+                }
+                $products[$index] = $product;
+            }
+            return $products;
         }
         return false;
     }
@@ -74,12 +96,12 @@ class PrsProducts
     {
         $count = 1;
         $active = 0;
-        $table_data = "<table id='products_table' class='widefat striped fixed_head'><thead>" . $this->view_products_table_head()."</thead>";
-        $table_data .="<tbody>";
-        if (isset($this->products)) {
-            foreach ($this->products as $product) {
-                if($product["price"] == "0") continue;
-                if($product["stock"] == "0") continue;
+        $table_data = "<table id='products_table' class='widefat striped fixed_head'><thead>" . $this->view_products_table_head() . "</thead>";
+        $table_data .= "<tbody>";
+        if (isset($this->prs_products)) {
+            foreach ($this->prs_products as $product) {
+                if ($product["price"] == "0") continue;
+                if ($product["stock"] == "0") continue;
                 $table_data .= $this->view_product_line($product);
                 $active++;
                 $count++;
@@ -87,7 +109,7 @@ class PrsProducts
                     break;
             }
         }
-        $table_data .="</tbody>";
+        $table_data .= "</tbody>";
         $table_data .= "</table>";
         $this->set_active_products($active);
         $this->set_counted_products($count);
@@ -100,8 +122,8 @@ class PrsProducts
         $table_data = '';
         $count = 0;
         if (strlen($serch_txt) > 2) {
-            $table_data .= "<table id='search_table' class='widefat striped fixed_head'><thead>" . $this->view_products_table_head()."</thead>";
-            foreach ($this->products as $product) {
+            $table_data .= "<table id='search_table' class='widefat striped fixed_head'><thead>" . $this->view_products_table_head() . "</thead>";
+            foreach ($this->prs_products as $product) {
                 if ((stripos($product['name'], $serch_txt) !== false || stripos($product['SKU'], $serch_txt) !== false)) {
                     $table_data .= $this->view_product_line($product);
                     $count++;
@@ -133,8 +155,8 @@ class PrsProducts
         $product_line = "<tr class='product'>
         <td data-column='SKU'>{$product['SKU']}</td>
         <td data-column='name'>{$product['name']}</td>
-        <td data-column='price'>".Helper::num_format($product['price'],2)." / ".Helper::num_format($product['wholesale_price'],2)."</td>
-        <td data-column='stock'>".Helper::num_format($product['stock'])."</td>
+        <td data-column='price'>" . PrsHelper::num_format($product['price'], 2) . " / " . PrsHelper::num_format($product['wholesale_price'], 2) . "</td>
+        <td data-column='stock'>" . PrsHelper::num_format($product['stock']) . "</td>
         <td><button class='button action'>Add</button></td></tr>";
         return $product_line;
     }
@@ -193,11 +215,11 @@ class PrsProducts
         if ($_POST['data']) {
             $products = $_POST['data'];
         } else {
-            $products = $this->products;
+            $products = $this->prs_products;
         }
         foreach ($products as $product) {
-            if($product["price"] == "0") continue;
-            if($product["stock"] == "0") continue;
+            if ($product["price"] == "0") continue;
+            if ($product["stock"] == "0") continue;
             $this->add_one_product($product);
             $count++;
             if ($count > $this->get_products_limit())
@@ -212,7 +234,7 @@ class PrsProducts
         $count = 0;
         $success = 0;
         $all_sku = $this->get_existings_products_skus();
-        foreach ($this->products as $product) {
+        foreach ($this->prs_products as $product) {
             if (in_array($product['SKU'], $all_sku)) {
                 $product_id = $wpdb->get_var($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product['SKU']));
                 update_post_meta($product_id, '_regular_price', intval($product['price'], 10));

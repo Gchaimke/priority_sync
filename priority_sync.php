@@ -34,5 +34,7 @@ foreach ($data_folders as $folder) {
 require PRS_PLAGIN_ROOT . 'vendor/autoload.php';
 
 use PrioritySync\PrsPlugin;
+use PrioritySync\PrsProducts;
 
-$plugin = new PrsPlugin();
+$prs_products = new PrsProducts();
+$prs_plugin = new PrsPlugin();

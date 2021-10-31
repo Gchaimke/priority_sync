@@ -12,15 +12,15 @@ function prs_dashboard()
 
 function prs_products()
 {
-    $product_class = new PrsProducts();
+    $prs_product_class = new PrsProducts();
     if (isset($_GET['limit'])) {
         if ($_GET['limit'] == 'no') {
-            $product_class->set_products_limit(count($product_class->products));
+            $prs_product_class->set_products_limit(count($prs_product_class->prs_products));
         } else {
-            $product_class->set_products_limit($_GET['limit']);
+            $prs_product_class->set_products_limit($_GET['limit']);
         }
     }
-    $table_data = $product_class->view_products();
+    $table_data = $prs_product_class->view_products();
     include 'products.php';
 }
 

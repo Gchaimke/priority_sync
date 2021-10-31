@@ -6,7 +6,9 @@ class PrsHelper
 {
     public static function num_format($num, $after_dot = 0)
     {
-        return number_format($num, $after_dot, '.', '');
+        if (!is_object($num)) {
+            return number_format($num, $after_dot, '.', '');
+        }
     }
 
     public static function debug($data)

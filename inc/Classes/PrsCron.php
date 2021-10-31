@@ -27,8 +27,8 @@ class PrsCron
         $sync_status = Cron::prs_sync_files();
         if ($sync_status > 0) {
             //Cron Update products data
-            $product_class = new PrsProducts();
-            $product_class->update_all_products();
+            $prs_product_class = new PrsProducts();
+            $prs_product_class->update_all_products();
         } else {
             Logger::log_message('No Updates');
         }
