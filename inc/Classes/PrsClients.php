@@ -70,14 +70,16 @@ class PrsClients
                             $cclient['street'] = $value;
                             break;
                         case 'CTYPECODE':
-                            $cclient['PricelistCode'] = $value == '12' ? 2 : 0;
+                            $cclient['PricelistCode'] = $value == '10' ? 0 : 2;
+                            break;
+                        case 'ZIP':
+                            $cclient['zip'] = $value;
                             break;
                         default:
                             break;
                     }
                     $cclient['Cellular'] = "";
                     $cclient['city'] = "";
-                    $cclient['zip'] = "";
                 }
                 $clients[$index] = $cclient;
             }
@@ -88,7 +90,7 @@ class PrsClients
 
     public function buildClientsTable($clients)
     {
-        $table_data = "<table class='widefat striped fixed_head clients_table'>" . $this->view_clients_table_head();
+        $table_data = "<table class='widefat striped fixed_head prs_clients_table'>" . $this->view_clients_table_head();
         foreach ($clients as $client) {
             $table_data .= $this->view_client_line($client);
         }
@@ -106,8 +108,7 @@ class PrsClients
             <th>email</th>
             <th>Phone</th>
             <th>Cellular</th>
-            <th>Street</th>
-            <th>City</th>
+            <th>Address</th>
             <th>Zip</th>
             <th>Reseller</th>
             <th>Wp User</th>
@@ -141,7 +142,6 @@ class PrsClients
                 <td data-column='phone'>{$client['Phone1']}</td>
                 <td data-column='cellular'>{$client['Cellular']}</td>
                 <td data-column='street'>{$client['street']} </td>
-                <td data-column='city'>{$client['city']}</td>
                 <td data-column='zip'>{$client['zip']} </td>
                 <td data-column='reseller' style='$reseller_style'>$reseller</td>
                 <td class='client_exists' style='$exists_style'>$exists</td>";
@@ -250,9 +250,20 @@ class PrsClients
                     die;
                 }
             }
+        } else {
+            $user["email"] = $user['id'] . "@avdor.com";
+            if (!$this->isWpUser($user)) {
+                $user['id'] = wp_create_user($user["email"], $user["password"], $user["email"]);
+                if ($user['id'] > 1) {
+                    $this->set_user_data($user);
+                }
+                echo "New user created! username: {$user["name"]} and email: {$user["email"]}";
+                die;
+            }
+
+            echo "This user up to date!";
+            die;
         }
-        echo "Can't add user without email!";
-        die;
     }
 
     function set_user_data($user)

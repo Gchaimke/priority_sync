@@ -21,12 +21,12 @@
         });
     }
 
-    $('#search_for_client').on('click', function () {
+    $('#prs_search_for_client').on('click', function () {
         $('#admin_message').empty();
         my_ajax('prs_search_for_client', $("#search_client").val(), true);
     });
 
-    $(document).on('click', 'table.clients_table button', function () {
+    $(document).on('click', 'table.prs_clients_table button', function () {
         var row = $(this).closest('tr');
         var columns = row.find('td');
         var user_data = build_row_array(columns);
