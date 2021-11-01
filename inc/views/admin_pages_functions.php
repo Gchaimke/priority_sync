@@ -1,6 +1,7 @@
 <?php
 
 use PrioritySync\PrsCron;
+use PrioritySync\PrsClients;
 use PrioritySync\PrsProducts;
 use PrioritySync\PrsLogger;
 
@@ -9,6 +10,11 @@ function prs_dashboard()
     include 'dashboard.php';
 }
 
+function prs_clients()
+{
+    $clientsCl = new PrsClients();
+    include 'clients.php';
+}
 
 function prs_products()
 {

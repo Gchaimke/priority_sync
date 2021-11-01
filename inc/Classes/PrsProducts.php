@@ -7,6 +7,7 @@ class PrsProducts
     private $max_products;
     private $active_products;
     public $prs_products;
+
     public function __construct()
     {
         $products = $this->get_products_data();

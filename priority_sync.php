@@ -33,8 +33,10 @@ foreach ($data_folders as $folder) {
 // include the Composer autoload file
 require PRS_PLAGIN_ROOT . 'vendor/autoload.php';
 
-use PrioritySync\PrsPlugin;
+use PrioritySync\PrsClients;
 use PrioritySync\PrsProducts;
+use PrioritySync\PrsPlugin;
 
+$prs_clients = new PrsClients();
 $prs_products = new PrsProducts();
 $prs_plugin = new PrsPlugin();

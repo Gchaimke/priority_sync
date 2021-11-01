@@ -33,43 +33,16 @@ function CallAPI($url, $username, $pass)
     <table class="form-table">
         <tbody>
             <tr>
+                <th scope="row" colspan="2">
+                    <h2>Priority site settings</h2>
+                </th>
+            </tr>
+            <tr>
                 <th scope="row">
                     <label for="prs_priority_url">Priority URL</label>
                 </th>
                 <td>
                     <input type="text" name="prs_priority_url" value="<?php echo get_option('prs_priority_url'); ?>" style="width: 550px">
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label for="prs_priority_select">Select Columns</label>
-                </th>
-                <td>
-                    <input type="text" name="prs_priority_select" value="<?php echo get_option('prs_priority_select'); ?>" style="width: 550px">
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label for="prs_priority_filter">Filter rows</label>
-                </th>
-                <td>
-                    <input type="text" name="prs_priority_filter" value="<?php echo get_option('prs_priority_filter'); ?>" style="width: 550px">
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label for="prs_priority_expand">Expend sub rows</label>
-                </th>
-                <td>
-                    <input type="text" name="prs_priority_expand" value="<?php echo get_option('prs_priority_expand'); ?>" style="width: 550px">
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label for="prs_url_parameters">URL Optional Parameters</label>
-                </th>
-                <td>
-                    <input type="text" name="prs_url_parameters" value="<?php echo get_option('prs_url_parameters'); ?>" style="width: 500px">
                 </td>
             </tr>
             <tr>
@@ -88,37 +61,147 @@ function CallAPI($url, $username, $pass)
                     <input type="password" name="prs_api_pass" value="<?php echo get_option('prs_api_pass'); ?>">
                 </td>
             </tr>
+            <tr>
+                <th scope="row" colspan="2">
+                    <h2>Priority Parts settings</h2>
+                </th>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_parts_table">Parts Table</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_parts_table" value="<?php echo get_option('prs_priority_parts_table'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_parts_select">Select Parts Columns</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_parts_select" value="<?php echo get_option('prs_priority_parts_select'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_parts_filter">Filter Parts rows</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_parts_filter" value="<?php echo get_option('prs_priority_parts_filter'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_parts_expand">Expend Parts sub rows</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_parts_expand" value="<?php echo get_option('prs_priority_parts_expand'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2"><a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_parts">Get Parts</a>
+                    <a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&show_parts">Show parts File</a>
+                    <a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_parts&save_file">Get Parts & Save to File</a>
+                </th>
+            </tr>
+            <tr>
+                <th scope="row" colspan="2">
+                    <h2>Priority Customers settings</h2>
+                </th>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_customers_table">Customers Table</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_customers_table" value="<?php echo get_option('prs_priority_customers_table'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_customers_select">Select Customers Columns</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_customers_select" value="<?php echo get_option('prs_priority_customers_select'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_customers_filter">Filter Customers rows</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_customers_filter" value="<?php echo get_option('prs_priority_customers_filter'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="prs_priority_customers_expand">Expend Customers sub rows</label>
+                </th>
+                <td>
+                    <input type="text" name="prs_priority_customers_expand" value="<?php echo get_option('prs_priority_customers_expand'); ?>" style="width: 550px">
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2"><a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_customers">Get Customers</a>
+                    <a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&show_customers">Show Customers File</a>
+                    <a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_customers&save_file">Get Customers & Save to File</a>
+                </th>
+            </tr>
         </tbody>
     </table>
     <?php submit_button(); ?>
 </form>
-<a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_data">Get Data from Server</a>
-<a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_file">Get Data from File</a>
-<a class="button button-secondary" href="/wp-admin/admin.php?page=prs_settings&get_data&save_file">Get Data & Save to File</a>
+
 <pre>
     <?php
-    if (isset($_GET['get_data'])) {
+    if (isset($_GET['get_parts'])) {
         ini_set('max_execution_time', 0);
         $url = get_option('prs_priority_url');
         $url_params = str_replace(
             ' ',
             '%20',
-            '$select=' . get_option('prs_priority_select') .
-                '&$filter=' . get_option('prs_priority_filter') .
-                '&$expand=' . get_option('prs_priority_expand') . "&" .
-                get_option('prs_url_parameters')
+            '/' . get_option('prs_priority_parts_table') .
+                '?$select=' . get_option('prs_priority_parts_select') .
+                '&$filter=' . get_option('prs_priority_parts_filter') .
+                '&$expand=' . get_option('prs_priority_parts_expand')
         );
         $username = get_option('prs_api_username');
         $pass = get_option('prs_api_pass');
-        $json_data = CallAPI($url . "?" . $url_params, $username, $pass);
+        $json_data = CallAPI($url . $url_params, $username, $pass);
         if (isset($_GET['save_file'])) {
             file_put_contents(PRS_DATA_FOLDER . 'sync/products.json', $json_data);
         }
         print_r(json_decode($json_data));
     }
-    if (isset($_GET['get_file'])) {
+
+    if (isset($_GET['get_customers'])) {
+        ini_set('max_execution_time', 0);
+        $url = get_option('prs_priority_url');
+        $url_params = str_replace(
+            ' ',
+            '%20',
+            '/' . get_option('prs_priority_customers_table') .
+                '?$select=' . get_option('prs_priority_customers_select') .
+                '&$filter=' . get_option('prs_priority_customers_filter') .
+                '&$expand=' . get_option('prs_priority_customers_expand')
+        );
+        $username = get_option('prs_api_username');
+        $pass = get_option('prs_api_pass');
+        $json_data = CallAPI($url . $url_params, $username, $pass);
+        if (isset($_GET['save_file'])) {
+            file_put_contents(PRS_DATA_FOLDER . 'sync/customers.json', $json_data);
+        }
+        print_r(json_decode($json_data));
+    }
+    if (isset($_GET['show_parts'])) {
         if (file_exists(PRS_DATA_FOLDER . 'sync/products.json')) {
             $json_data = file_get_contents(PRS_DATA_FOLDER . 'sync/products.json');
+            print_r(json_decode($json_data));
+        }
+    }
+    if (isset($_GET['show_customers'])) {
+        if (file_exists(PRS_DATA_FOLDER . 'sync/customers.json')) {
+            $json_data = file_get_contents(PRS_DATA_FOLDER . 'sync/customers.json');
             print_r(json_decode($json_data));
         }
     }

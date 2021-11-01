@@ -4,6 +4,20 @@ namespace PrioritySync;
 
 class PrsPlugin
 {
+    private $settings_rows = array(
+        'prs_priority_url',
+        'prs_api_username',
+        'prs_api_pass',
+        'prs_priority_parts_table',
+        'prs_priority_parts_select',
+        'prs_priority_parts_filter',
+        'prs_priority_parts_expand',
+        'prs_priority_customers_table',
+        'prs_priority_customers_select',
+        'prs_priority_customers_filter',
+        'prs_priority_customers_expand',
+    );
+
     public function __construct()
     {
         add_action('admin_menu', [$this, 'prs_add_admin_pages']);
@@ -18,6 +32,7 @@ class PrsPlugin
     {
         require_once PRS_PLAGIN_ROOT . 'inc/views/admin_pages_functions.php';
         add_menu_page('Priority', 'Priority sync', 'edit_pages', 'prs_dashboard', 'prs_dashboard', 'dashicons-businessman', 4);
+        add_submenu_page('prs_dashboard', 'Clients', "Clients", 'edit_pages', 'prs_clients', 'prs_clients');
         add_submenu_page('prs_dashboard', "Products", "Products", 'edit_pages', 'prs_products', 'prs_products');
         add_submenu_page('prs_dashboard', "Settings", "Settings", 'edit_pages', 'prs_settings', 'prs_settings');
         add_submenu_page('prs_dashboard', "Logs", "Logs", 'edit_pages', 'prs_logs', 'prs_logs');
@@ -56,12 +71,8 @@ class PrsPlugin
 
     public function update_prs_settings()
     {
-        register_setting('prs-plugin-settings', 'prs_priority_url');
-        register_setting('prs-plugin-settings', 'prs_priority_select');
-        register_setting('prs-plugin-settings', 'prs_priority_filter');
-        register_setting('prs-plugin-settings', 'prs_priority_expand');
-        register_setting('prs-plugin-settings', 'prs_url_parameters');
-        register_setting('prs-plugin-settings', 'prs_api_username');
-        register_setting('prs-plugin-settings', 'prs_api_pass');
+        foreach ($this->settings_rows as $value) {
+            register_setting('prs-plugin-settings', $value);
+        }
     }
 }

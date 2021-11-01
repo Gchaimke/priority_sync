@@ -21,6 +21,18 @@
         });
     }
 
+    $('#search_for_client').on('click', function () {
+        $('#admin_message').empty();
+        my_ajax('prs_search_for_client', $("#search_client").val(), true);
+    });
+
+    $(document).on('click', 'table.clients_table button', function () {
+        var row = $(this).closest('tr');
+        var columns = row.find('td');
+        var user_data = build_row_array(columns);
+        my_ajax('prs_add_update_user', user_data);
+    });
+
     function build_row_array(columns) {
         var product_values = {};
         $.each(columns, function (i, item) {
