@@ -1,31 +1,8 @@
-<h1>Settings</h1>
+<h1>Priority Settings</h1>
 <?php
 echo ($required_plugins_str);
 // $url = 'https://avdortest.wee.co.il/odata/Priority/tabula.ini/a121021/LOGPART?';
 // $url_params = '$select=PARTNAME,PARTDES,EPARTDES,STATDES,WEBLEVEL,SUPDES,BASEPLPRICE,WSPLPRICE&$filter=WEBLEVEL%20eq%20\'1\'&$expand=PARTBALANCE_SUBFORM($select=BALANCE)';
-$json_data = "";
-function CallAPI($url, $username, $pass)
-{
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($curl, CURLOPT_USERPWD, "$username:$pass");
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    $result = curl_exec($curl);
-    if (!curl_errno($curl)) {
-        switch ($http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
-            case 200:  # OK
-                break;
-            case 401:
-                echo "<h2> Error " . curl_getinfo($curl)['http_code'] . ": <ol><li>Wrong user name or password</li><li>Or Priority page not exists.</li></ol></h2>";
-                break;
-            default:
-                echo 'Unexpected HTTP code: ', $http_code, "\n";
-        }
-    }
-    curl_close($curl);
-    return $result;
-}
 ?>
 <form method="POST" action="options.php">
     <?php settings_fields('prs-plugin-settings'); ?>
@@ -154,6 +131,32 @@ function CallAPI($url, $username, $pass)
 
 <pre>
     <?php
+    $json_data = "";
+    function CallAPI($url, $username, $pass)
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($curl, CURLOPT_USERPWD, "$username:$pass");
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($curl);
+        if (!curl_errno($curl)) {
+            switch ($http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
+                case 200:  # OK
+                    curl_close($curl);
+                    return $result;
+                    break;
+                case 401:
+                    echo "<h2> Error " . curl_getinfo($curl)['http_code'] . ": <ol><li>Wrong user name or password</li><li>Or Priority page not exists.</li></ol></h2>";
+                    break;
+                default:
+                    echo 'Unexpected HTTP code: ', $http_code, "\n";
+            }
+        }
+        curl_close($curl);
+        return false;
+    }
+
     if (isset($_GET['get_parts'])) {
         ini_set('max_execution_time', 0);
         $url = get_option('prs_priority_url');
@@ -168,8 +171,9 @@ function CallAPI($url, $username, $pass)
         $username = get_option('prs_api_username');
         $pass = get_option('prs_api_pass');
         $json_data = CallAPI($url . $url_params, $username, $pass);
-        if (isset($_GET['save_file'])) {
+        if ($json_data && isset($_GET['save_file'])) {
             file_put_contents(PRS_DATA_FOLDER . 'sync/products.json', $json_data);
+            echo "file saved";
         }
         print_r(json_decode($json_data));
     }
@@ -188,8 +192,9 @@ function CallAPI($url, $username, $pass)
         $username = get_option('prs_api_username');
         $pass = get_option('prs_api_pass');
         $json_data = CallAPI($url . $url_params, $username, $pass);
-        if (isset($_GET['save_file'])) {
+        if ($json_data && isset($_GET['save_file'])) {
             file_put_contents(PRS_DATA_FOLDER . 'sync/customers.json', $json_data);
+            echo "file saved";
         }
         print_r(json_decode($json_data));
     }

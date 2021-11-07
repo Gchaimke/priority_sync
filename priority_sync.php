@@ -19,6 +19,8 @@ date_default_timezone_set(get_option('timezone_string'));
 define('PRS_VERSION', $version);
 define('PRS_PLAGIN_ROOT', plugin_dir_path(__FILE__));
 define('PRS_PLAGIN_URL', plugin_dir_url(__FILE__));
+define('PRS_MIN_ORDER', 200);
+
 //define erp-data folder
 $upload_dir = wp_upload_dir();
 define('PRS_DATA_FOLDER', $upload_dir['basedir'] . '/priority-data/');
@@ -40,3 +42,6 @@ use PrioritySync\PrsPlugin;
 $prs_clients = new PrsClients();
 $prs_products = new PrsProducts();
 $prs_plugin = new PrsPlugin();
+
+
+require PRS_PLAGIN_ROOT . 'priority_sync_wp_addons.php';

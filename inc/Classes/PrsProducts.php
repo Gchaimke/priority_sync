@@ -31,33 +31,35 @@ class PrsProducts
         $products = array();
         if (file_exists($file)) {
             $data = json_decode(file_get_contents($file));
-            foreach ($data->value as $index => $part) {
-                $product = array();
-                foreach ($part as $key => $value) {
-                    switch ($key) {
-                        case 'PARTNAME':
-                            $product['SKU'] = $value;
-                            break;
-                        case 'PARTDES':
-                            $product['name'] = $value;
-                            break;
-                        case 'BASEPLPRICE':
-                            $product['price'] = $value;
-                            break;
-                        case 'WSPLPRICE':
-                            $product['wholesale_price'] = $value;
-                            break;
-                        case 'PARTBALANCE_SUBFORM':
-                            $product['stock'] = isset($value[0]->BALANCE) ? $value[0]->BALANCE : 1;
-                            break;
-                        default:
-                            # code...
-                            break;
+            if (isset($data->value)) {
+                foreach ($data->value as $index => $part) {
+                    $product = array();
+                    foreach ($part as $key => $value) {
+                        switch ($key) {
+                            case 'PARTNAME':
+                                $product['SKU'] = $value;
+                                break;
+                            case 'PARTDES':
+                                $product['name'] = $value;
+                                break;
+                            case 'BASEPLPRICE':
+                                $product['price'] = $value;
+                                break;
+                            case 'WSPLPRICE':
+                                $product['wholesale_price'] = $value;
+                                break;
+                            case 'PARTBALANCE_SUBFORM':
+                                $product['stock'] = isset($value[0]->BALANCE) ? $value[0]->BALANCE : 1;
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
                     }
+                    $products[$index] = $product;
                 }
-                $products[$index] = $product;
+                return $products;
             }
-            return $products;
         }
         return false;
     }
