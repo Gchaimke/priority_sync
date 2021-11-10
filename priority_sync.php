@@ -13,7 +13,7 @@ Text Domain: priority_sync
 if (!defined('WPINC')) {
     die;
 }
-$version = '1.0.1';
+$version = '1.0.2';
 //sync timezone with wordpress
 date_default_timezone_set(get_option('timezone_string'));
 define('PRS_VERSION', $version);
