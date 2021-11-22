@@ -97,7 +97,7 @@ function view_selected_log() {
 
 function go_to_log(date) {
     if (date != '') {
-        window.location.href = 'admin.php?page=wesLogs&log=' + date;
+        window.location.href = 'admin.php?page=prs_logs&log=' + date;
     } else {
         alert('please select date');
     }

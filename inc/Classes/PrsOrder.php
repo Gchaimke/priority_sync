@@ -6,14 +6,14 @@ class PrsOrder
 {
     public function __construct()
     {
-        add_action('woocommerce_thankyou_order_id', [$this, 'wes_sync_order']);
+        add_action('woocommerce_thankyou_order_id', [$this, 'prs_sync_order']);
     }
     
-    function wes_sync_order($order_id){
-        $file_status = $this->wes_create_order($order_id);
+    function prs_sync_order($order_id){
+        $file_status = $this->prs_create_order($order_id);
         if($file_status){
             PrsLogger::log_message('New order created! SITEDOC_' . $order_id . '.xml');
-            $status = $this->wes_upload_order($order_id);
+            $status = $this->prs_upload_order($order_id);
             if($status){
                 PrsLogger::log_message("Order: $order_id uploaded success!");
             }else{
@@ -25,7 +25,7 @@ class PrsOrder
         
     }
     
-    function wes_create_order($order_id){
+    function prs_create_order($order_id){
         
         $order_data = wc_get_order($order_id);
 
@@ -130,7 +130,7 @@ class PrsOrder
         }
     }
 
-    function wes_upload_order($order_id)
+    function prs_upload_order($order_id)
     {
         //Google Upload
         $google_helper = new Google_Helper();
