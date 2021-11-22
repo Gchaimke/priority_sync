@@ -60,7 +60,7 @@ function prs_settings()
         PrsCron::remove_cron($_GET['remove_cron']);
         echo '<h4>' . $_GET['remove_cron'] . ' job removed</h4>';
     }
-    // Cron::get_all_jobs();
+    PrsCron::get_all_jobs();
 }
 
 function prs_logs()

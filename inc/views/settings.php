@@ -212,3 +212,9 @@ echo ($required_plugins_str);
     }
     ?>
 </pre>
+
+<div>
+    <h3>Cron Data</h3>
+    <a class="button" href="?page=prs_settings&cron=run">Run Job</a>
+    <h4>Next CRM cron job <?php echo date('d-m-Y H:i:s', wp_next_scheduled('prs_sync_data')) ?></h4>
+</div>

@@ -6,11 +6,11 @@ class PrsCron
 {
     public function __construct()
     {
-        add_action('prs_crm_sync_data', [$this, 'prs_cron_exec']);
+        add_action('prs_sync_data', [$this, 'prs_cron_exec']);
         add_filter('cron_schedules', [$this, 'prs_cron_interval']);
-        $timestamp = date('d-m-Y H:i:s', wp_next_scheduled('prs_crm_sync_data'));
-        if (!wp_next_scheduled('prs_crm_sync_data')) {
-            wp_schedule_event(time(), 'ten_minutes', 'prs_crm_sync_data');
+        $timestamp = date('d-m-Y H:i:s', wp_next_scheduled('prs_sync_data'));
+        if (!wp_next_scheduled('prs_sync_data')) {
+            wp_schedule_event(time(), 'ten_minutes', 'prs_sync_data');
         }
     }
 
@@ -24,7 +24,7 @@ class PrsCron
     {
         PrsLogger::log_message('=== Cron job Sart ===');
         //Cron Sync data files with Gdrive
-        $sync_status = Cron::prs_sync_files();
+        $sync_status = self::prs_sync_files();
         if ($sync_status > 0) {
             //Cron Update products data
             $prs_product_class = new PrsProducts();
@@ -37,18 +37,7 @@ class PrsCron
 
     private static function prs_sync_files()
     {
-        $google_helper = new Google_Helper();
-        $client = $google_helper->get_client();
-        $token = $google_helper->get_token()->access_token;
-        $client->setAccessToken($token);
-        $sync_status = $google_helper->get_sync_files($google_helper->get_service());
-        if ($sync_status > 0) {
-            return $sync_status;
-        } else if ($sync_status == -1) {
-            PrsLogger::log_message('Try to get token from refresh.');
-            $client->setAccessToken($google_helper->get_token_from_refresh());
-            return $google_helper->get_sync_files($google_helper->get_service());
-        }
+
     }
 
 
@@ -66,7 +55,7 @@ class PrsCron
                         echo '<td>' . $jkey . '</td>';
                     }
                     echo '<td>' . $data['schedule'] . '</td>';
-                    echo '<td><a class="button" href="?page=prsSettings&remove_cron=' . $jkey . '">remove</a></td>';
+                    echo '<td><a class="button" href="?page=prs_settings&remove_cron=' . $jkey . '">remove</a></td>';
                 }
             }
             echo '</tr>';
