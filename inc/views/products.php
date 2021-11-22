@@ -9,7 +9,7 @@
 </div>
 <div class="form_control">
     <label class="label">View all XML products</label>
-    <a class='button action' href="?page=prs_products&limit=no">View All</a>
+    <a class='button action' href="?page=prs_sync&limit=no">View All</a>
 </div>
 <div class="form_control">
     <label class="label">Search XML products by SKU</label>

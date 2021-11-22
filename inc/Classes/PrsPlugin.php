@@ -31,11 +31,11 @@ class PrsPlugin
     public function prs_add_admin_pages()
     {
         require_once PRS_PLAGIN_ROOT . 'inc/views/admin_pages_functions.php';
-        add_menu_page('Priority', 'Priority sync', 'edit_pages', 'prs_dashboard', 'prs_dashboard', 'dashicons-businessman', 4);
-        add_submenu_page('prs_dashboard', 'Clients', "Clients", 'edit_pages', 'prs_clients', 'prs_clients');
-        add_submenu_page('prs_dashboard', "Products", "Products", 'edit_pages', 'prs_products', 'prs_products');
-        add_submenu_page('prs_dashboard', "Settings", "Settings", 'edit_pages', 'prs_settings', 'prs_settings');
-        add_submenu_page('prs_dashboard', "Logs", "Logs", 'edit_pages', 'prs_logs', 'prs_logs');
+        add_menu_page('Priority sync', 'Priority sync', 'edit_pages', 'prs_sync', 'prs_products', 'dashicons-businessman', 4);
+        add_submenu_page('prs_sync', "Products", "Products", 'edit_pages', 'prs_sync');
+        add_submenu_page('prs_sync', 'Clients', "Clients", 'edit_pages', 'prs_clients', 'prs_clients');
+        add_submenu_page('prs_sync', "Settings", "Settings", 'edit_pages', 'prs_settings', 'prs_settings');
+        add_submenu_page('prs_sync', "Logs", "Logs", 'edit_pages', 'prs_logs', 'prs_logs');
     }
 
     public function prs_admin_scripts()

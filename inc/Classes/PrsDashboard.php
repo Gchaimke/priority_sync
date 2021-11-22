@@ -16,12 +16,12 @@ class PrsDashboard
     function prs_dashboar_content()
     {
         $dir = PRS_DATA_FOLDER . "sync/";
-        $files = glob($dir . "*.XML");
+        $files = glob($dir . "*.json");
         $html = "<h1>Last update</h1><div class='prs_dash_updates'>";
         foreach ($files as $file) {
             $html .= "<div class='prs_row'><span>" . basename($file) .  "</span>  <span>" . date("d-m-Y H:i:s", filemtime($file)) . "</span></div>";
         }
-        $html .= "</div><a class='button' target='_blank' href='/wp-admin/admin.php?page=prsSettings&sync=true'>Sync Now</a>";
+        $html .= "</div><a class='button' target='_blank' href='/wp-admin/admin.php?page=prs_settings&cron=run'>Sync Now</a>";
         echo $html;
     }
 }
