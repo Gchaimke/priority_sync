@@ -212,7 +212,6 @@ class PrsProducts
             echo 'Product with SKU:' . $product_data['SKU'] . ' Exists!';
         }
         return true;
-        die();
     }
 
     function add_all_products()
@@ -233,7 +232,6 @@ class PrsProducts
                 break;
         }
         echo (" - " . $count . ' new products added!');
-        die();
     }
 
     function update_all_products()
@@ -264,7 +262,6 @@ class PrsProducts
         $msg = "Total: $count, Updated: $success ";
         echo $msg;
         PrsLogger::log_message($msg);
-        die();
     }
 
     function get_existings_products_skus()

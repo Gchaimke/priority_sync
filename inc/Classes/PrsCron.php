@@ -25,7 +25,7 @@ class PrsCron
         PrsLogger::log_message('=== Cron job Sart ===');
         //Cron Sync data files with Gdrive
         $sync_status = self::prs_sync_products();
-        if ($sync_status > 0) {
+        if ($sync_status !== false) {
             //Cron Update products data
             $prs_product_class = new PrsProducts();
             $prs_product_class->update_all_products();
@@ -35,7 +35,7 @@ class PrsCron
         PrsLogger::log_message('*** Cron job End ***');
     }
 
-    private static function prs_sync_products($to_file = true)
+    public static function prs_sync_products($to_file = true)
     {
         ini_set('max_execution_time', 0);
         $url = get_option('prs_priority_url');
@@ -53,9 +53,34 @@ class PrsCron
         if ($json_data && $to_file) {
             file_put_contents(PRS_DATA_FOLDER . 'sync/products.json', $json_data);
             PrsLogger::log_message("products.json saved");
-        }else{
-            PrsLogger::log_message("error to save products.json");
+        } else if (!$json_data) {
+            PrsLogger::log_message("error: can't get products from server.");
         }
+        return $json_data;
+    }
+
+    public static function prs_sync_customers($to_file = true)
+    {
+        ini_set('max_execution_time', 0);
+        $url = get_option('prs_priority_url');
+        $url_params = str_replace(
+            ' ',
+            '%20',
+            '/' . get_option('prs_priority_customers_table') .
+                '?$select=' . get_option('prs_priority_customers_select') .
+                '&$filter=' . get_option('prs_priority_customers_filter') .
+                '&$expand=' . get_option('prs_priority_customers_expand')
+        );
+        $username = get_option('prs_api_username');
+        $pass = get_option('prs_api_pass');
+        $json_data = PrsHelper::CallAPI($url . $url_params, $username, $pass);
+        if ($json_data && $to_file) {
+            file_put_contents(PRS_DATA_FOLDER . 'sync/customers.json', $json_data);
+            PrsLogger::log_message("customers.json saved");
+        } else if (!$json_data) {
+            PrsLogger::log_message("error: can't get customers from server.");
+        }
+        return $json_data;
     }
 
 

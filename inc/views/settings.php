@@ -131,50 +131,21 @@ echo ($required_plugins_str);
 
 <pre>
     <?php
+    use PrioritySync\PrsCron;
 
-    use PrioritySync\PrsHelper;
     $json_data = "";
     if (isset($_GET['get_parts'])) {
-        ini_set('max_execution_time', 0);
-        $url = get_option('prs_priority_url');
-        $url_params = str_replace(
-            ' ',
-            '%20',
-            '/' . get_option('prs_priority_parts_table') .
-                '?$select=' . get_option('prs_priority_parts_select') .
-                '&$filter=' . get_option('prs_priority_parts_filter') .
-                '&$expand=' . get_option('prs_priority_parts_expand')
-        );
-        $username = get_option('prs_api_username');
-        $pass = get_option('prs_api_pass');
-        $json_data = PrsHelper::CallAPI($url . $url_params, $username, $pass);
-        if ($json_data && isset($_GET['save_file'])) {
-            file_put_contents(PRS_DATA_FOLDER . 'sync/products.json', $json_data);
-            echo "file saved";
-        }
+        $to_file = isset($_GET['save_file']) ? true : false;
+        $json_data = PrsCron::prs_sync_products($to_file);
         print_r(json_decode($json_data));
     }
 
     if (isset($_GET['get_customers'])) {
-        ini_set('max_execution_time', 0);
-        $url = get_option('prs_priority_url');
-        $url_params = str_replace(
-            ' ',
-            '%20',
-            '/' . get_option('prs_priority_customers_table') .
-                '?$select=' . get_option('prs_priority_customers_select') .
-                '&$filter=' . get_option('prs_priority_customers_filter') .
-                '&$expand=' . get_option('prs_priority_customers_expand')
-        );
-        $username = get_option('prs_api_username');
-        $pass = get_option('prs_api_pass');
-        $json_data = PrsHelper::CallAPI($url . $url_params, $username, $pass);
-        if ($json_data && isset($_GET['save_file'])) {
-            file_put_contents(PRS_DATA_FOLDER . 'sync/customers.json', $json_data);
-            echo "file saved";
-        }
+        $to_file = isset($_GET['save_file']) ? true : false;
+        $json_data = PrsCron::prs_sync_customers($to_file);
         print_r(json_decode($json_data));
     }
+
     if (isset($_GET['show_parts'])) {
         if (file_exists(PRS_DATA_FOLDER . 'sync/products.json')) {
             $json_data = file_get_contents(PRS_DATA_FOLDER . 'sync/products.json');
