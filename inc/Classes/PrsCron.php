@@ -7,10 +7,10 @@ class PrsCron
     public function __construct()
     {
         add_action('prs_sync_data', [$this, 'prs_cron_exec']);
-        add_filter('cron_schedules', [$this, 'prs_cron_interval']);
-        $timestamp = date('d-m-Y H:i:s', wp_next_scheduled('prs_sync_data'));
+        // add_filter('cron_schedules', [$this, 'prs_cron_interval']);
+        // $timestamp = date('d-m-Y H:i:s', wp_next_scheduled('prs_sync_data'));
         if (!wp_next_scheduled('prs_sync_data')) {
-            wp_schedule_event(time(), 'ten_minutes', 'prs_sync_data');
+            wp_schedule_event(time(), 'hourly', 'prs_sync_data');
         }
     }
 
