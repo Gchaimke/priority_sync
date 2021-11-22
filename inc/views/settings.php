@@ -131,32 +131,9 @@ echo ($required_plugins_str);
 
 <pre>
     <?php
-    $json_data = "";
-    function CallAPI($url, $username, $pass)
-    {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curl, CURLOPT_USERPWD, "$username:$pass");
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($curl);
-        if (!curl_errno($curl)) {
-            switch ($http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
-                case 200:  # OK
-                    curl_close($curl);
-                    return $result;
-                    break;
-                case 401:
-                    echo "<h2> Error " . curl_getinfo($curl)['http_code'] . ": <ol><li>Wrong user name or password</li><li>Or Priority page not exists.</li></ol></h2>";
-                    break;
-                default:
-                    echo 'Unexpected HTTP code: ', $http_code, "\n";
-            }
-        }
-        curl_close($curl);
-        return false;
-    }
 
+    use PrioritySync\PrsHelper;
+    $json_data = "";
     if (isset($_GET['get_parts'])) {
         ini_set('max_execution_time', 0);
         $url = get_option('prs_priority_url');
@@ -170,7 +147,7 @@ echo ($required_plugins_str);
         );
         $username = get_option('prs_api_username');
         $pass = get_option('prs_api_pass');
-        $json_data = CallAPI($url . $url_params, $username, $pass);
+        $json_data = PrsHelper::CallAPI($url . $url_params, $username, $pass);
         if ($json_data && isset($_GET['save_file'])) {
             file_put_contents(PRS_DATA_FOLDER . 'sync/products.json', $json_data);
             echo "file saved";
@@ -191,7 +168,7 @@ echo ($required_plugins_str);
         );
         $username = get_option('prs_api_username');
         $pass = get_option('prs_api_pass');
-        $json_data = CallAPI($url . $url_params, $username, $pass);
+        $json_data = PrsHelper::CallAPI($url . $url_params, $username, $pass);
         if ($json_data && isset($_GET['save_file'])) {
             file_put_contents(PRS_DATA_FOLDER . 'sync/customers.json', $json_data);
             echo "file saved";

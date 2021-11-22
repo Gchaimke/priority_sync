@@ -37,6 +37,7 @@ require PRS_PLAGIN_ROOT . 'vendor/autoload.php';
 
 use PrioritySync\PrsClients;
 use PrioritySync\PrsCron;
+use PrioritySync\PrsHelper;
 use PrioritySync\PrsProducts;
 use PrioritySync\PrsPlugin;
 
@@ -44,6 +45,7 @@ $prs_clients = new PrsClients();
 $prs_products = new PrsProducts();
 $prs_plugin = new PrsPlugin();
 $prs_cron = new PrsCron();
+$prs_helper = new PrsHelper();
 
 
 require PRS_PLAGIN_ROOT . 'priority_sync_wp_addons.php';
