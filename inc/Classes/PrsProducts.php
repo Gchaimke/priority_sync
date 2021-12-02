@@ -31,6 +31,7 @@ class PrsProducts
         $subform = get_option('prs_priority_parts_expand');
         preg_match("/select=(\w*)/i",$subform,$selector);
         $selector = explode("=",$selector[0])[1];
+        $subform_name = explode("(",$subform)[0];
         $products = array();
         if (file_exists($file)) {
             $data = json_decode(file_get_contents($file));
@@ -51,7 +52,7 @@ class PrsProducts
                             case 'WSPLPRICE':
                                 $product['wholesale_price'] = $value;
                                 break;
-                            case 'PARTBALANCE_SUBFORM':
+                            case $subform_name:
                                 $product['stock'] = isset($value[0]->$selector) ? $value[0]->$selector : 1;
                                 break;
                             default:
