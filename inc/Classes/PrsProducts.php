@@ -111,7 +111,7 @@ class PrsProducts
             foreach ($this->prs_products as $product) {
                 if ($product["price"] == "0") continue;
                 if ($product["stock"] == "0") continue;
-                if(in_array($product['SKU'],$all_sku)){
+                if(!in_array($product['SKU'],$all_sku)){
                     $sku_not_exists[] = $product['SKU'];
                 }
                 $table_data .= $this->view_product_line($product);
