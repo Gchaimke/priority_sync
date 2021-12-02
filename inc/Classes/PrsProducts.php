@@ -28,6 +28,9 @@ class PrsProducts
     public function get_products_data()
     {
         $file = PRS_DATA_FOLDER . 'sync/products.json';
+        $subform = get_option('prs_priority_parts_expand');
+        preg_match("/select=(\w*)/i",$subform,$selector);
+        $selector = explode("=",$selector[0])[1];
         $products = array();
         if (file_exists($file)) {
             $data = json_decode(file_get_contents($file));
@@ -49,7 +52,7 @@ class PrsProducts
                                 $product['wholesale_price'] = $value;
                                 break;
                             case 'PARTBALANCE_SUBFORM':
-                                $product['stock'] = isset($value[0]->BALANCE) ? $value[0]->BALANCE : 1;
+                                $product['stock'] = isset($value[0]->$selector) ? $value[0]->$selector : 1;
                                 break;
                             default:
                                 # code...
