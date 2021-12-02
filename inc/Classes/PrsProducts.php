@@ -29,9 +29,9 @@ class PrsProducts
     {
         $file = PRS_DATA_FOLDER . 'sync/products.json';
         $subform = get_option('prs_priority_parts_expand');
-        preg_match("/select=(\w*)/i",$subform,$selector);
-        $selector = explode("=",$selector[0])[1];
-        $subform_name = explode("(",$subform)[0];
+        preg_match("/select=(\w*)/i", $subform, $selector);
+        $selector = explode("=", $selector[0])[1];
+        $subform_name = explode("(", $subform)[0];
         $products = array();
         if (file_exists($file)) {
             $data = json_decode(file_get_contents($file));
@@ -101,6 +101,8 @@ class PrsProducts
 
     public function view_products()
     {
+        $all_sku = $this->get_existings_products_skus();
+        $sku_not_exists =array();
         $count = 1;
         $active = 0;
         $table_data = "<table id='products_table' class='widefat striped fixed_head'><thead>" . $this->view_products_table_head() . "</thead>";
@@ -109,6 +111,9 @@ class PrsProducts
             foreach ($this->prs_products as $product) {
                 if ($product["price"] == "0") continue;
                 if ($product["stock"] == "0") continue;
+                if(in_array($product['SKU'],$all_sku)){
+                    $sku_not_exists[] = $product['SKU'];
+                }
                 $table_data .= $this->view_product_line($product);
                 $active++;
                 $count++;
@@ -118,6 +123,9 @@ class PrsProducts
         }
         $table_data .= "</tbody>";
         $table_data .= "</table>";
+        foreach ($sku_not_exists as $value) {
+            $table_data .= "<div>$value</div>";
+        }
         $this->set_active_products($active);
         $this->set_counted_products($count);
         return $table_data;
