@@ -109,8 +109,8 @@ class PrsProducts
         $table_data .= "<tbody>";
         if (isset($this->prs_products)) {
             foreach ($this->prs_products as $product) {
-                if ($product["price"] == "0") continue;
-                if ($product["stock"] == "0") continue;
+                // if ($product["price"] == "0") continue;
+                // if ($product["stock"] == "0") continue;
                 if(!in_array($product['SKU'],$all_sku)){
                     $sku_not_exists[] = $product['SKU'];
                 }
@@ -236,8 +236,8 @@ class PrsProducts
             $products = $this->prs_products;
         }
         foreach ($products as $product) {
-            if ($product["price"] == "0") continue;
-            if ($product["stock"] == "0") continue;
+            // if ($product["price"] == "0") continue;
+            // if ($product["stock"] == "0") continue;
             $this->add_one_product($product);
             $count++;
             if ($count > $this->get_products_limit())
