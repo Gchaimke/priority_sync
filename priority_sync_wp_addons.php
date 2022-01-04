@@ -128,7 +128,7 @@ function prs_maybe_hide_price($price_html, $product)
 	if ($product->get_price() > 0) {
 		return $price_html;
 	}
-	return 'For Order please call: 074-7155000';
+	return 'להזמנות נא להתקשר: 074-7155000';
 }
 
 //disable add to cart
